@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Comentario — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Comentario</h1>
+<div class="card">
+    <p><strong>Conteudo:</strong> {{ comentario.conteudo.titulo }}</p>
+    <p><strong>Usuario:</strong> {{ comentario.usuario.email }}</p>
+    <p><strong>Data:</strong> {{ comentario.data|date:"d/m/Y H:i" }}</p>
+    <p>{{ comentario.texto }}</p>
+</div>
+{% endblock %}

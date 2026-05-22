@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ autor.nome_plataforma }} — MedInfo{% endblock %}
+
+{% block content %}
+<h1>{{ autor.nome_plataforma }}</h1>
+<div class="card">
+    {% if autor.crm %}<p><strong>CRM:</strong> {{ autor.crm }}</p>{% endif %}
+    <p><strong>Atuacao:</strong> {{ autor.atuacao }}</p>
+    <p><strong>Instituicao:</strong> {{ autor.instituicao }}</p>
+</div>
+
+<h2>Conteudos deste autor</h2>
+{% for c in autor.conteudos.all %}
+    <div class="card">
+        <h3><a href="{% url 'conteudo:detail' c.pk %}">{{ c.titulo }}</a></h3>
+        <div class="meta">{{ c.especialidade.nome }} — {{ c.data_publicacao|date:"d/m/Y" }}</div>
+    </div>
+{% empty %}
+    <p>Nenhum conteudo deste autor.</p>
+{% endfor %}
+{% endblock %}

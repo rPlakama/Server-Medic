@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Categorias — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Categorias</h1>
+{% for c in categorias %}
+    <div class="card">
+        <h2><a href="{% url 'categoria:detail' c.pk %}">{{ c.get_tipo_display }} — {{ c.get_nivel_complexidade_display }}</a></h2>
+    </div>
+{% empty %}
+    <p>Nenhuma categoria cadastrada.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Conteudos — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Conteudos</h1>
+
+<div style="margin-bottom: 1.5rem;">
+    <a href="{% url 'conteudo:create' %}" class="btn">Adicionar conteudo</a>
+</div>
+
+{% for c in conteudos %}
+    <div class="card">
+        <h2><a href="{% url 'conteudo:detail' c.pk %}">{{ c.titulo }}</a></h2>
+        <div class="meta">
+            {{ c.autor.nome_plataforma }} —
+            {{ c.especialidade.nome }} —
+            {{ c.categoria.get_tipo_display }} ({{ c.categoria.get_nivel_complexidade_display }}) —
+            {{ c.data_publicacao|date:"d/m/Y" }}
+        </div>
+        <p>{{ c.descricao|truncatewords:30 }}</p>
+    </div>
+{% empty %}
+    <p>Nenhum conteudo cadastrado.</p>
+{% endfor %}
+{% endblock %}

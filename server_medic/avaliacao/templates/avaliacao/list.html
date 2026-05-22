@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Avaliacoes — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Avaliacoes</h1>
+{% for a in avaliacoes %}
+    <div class="card">
+        <h2><a href="{% url 'avaliacao:detail' a.pk %}">{{ a.conteudo.titulo }}</a></h2>
+        <div class="meta">
+            {{ a.usuario.email }} — Nota: {{ a.nota }} — {{ a.data_avaliacao|date:"d/m/Y" }}
+        </div>
+    </div>
+{% empty %}
+    <p>Nenhuma avaliacao.</p>
+{% endfor %}
+{% endblock %}

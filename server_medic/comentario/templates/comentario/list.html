@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Comentarios — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Comentarios</h1>
+{% for c in comentarios %}
+    <div class="card">
+        <h2><a href="{% url 'comentario:detail' c.pk %}">{{ c.conteudo.titulo }}</a></h2>
+        <div class="meta">{{ c.usuario.email }} — {{ c.data|date:"d/m/Y" }}</div>
+        <p>{{ c.texto|truncatewords:30 }}</p>
+    </div>
+{% empty %}
+    <p>Nenhum comentario.</p>
+{% endfor %}
+{% endblock %}

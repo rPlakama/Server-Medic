@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ categoria.get_tipo_display }} — MedInfo{% endblock %}
+
+{% block content %}
+<h1>{{ categoria.get_tipo_display }} — {{ categoria.get_nivel_complexidade_display }}</h1>
+
+<h2>Conteudos desta categoria</h2>
+{% for c in categoria.conteudos.all %}
+    <div class="card">
+        <h3><a href="{% url 'conteudo:detail' c.pk %}">{{ c.titulo }}</a></h3>
+        <div class="meta">{{ c.autor.nome_plataforma }} — {{ c.data_publicacao|date:"d/m/Y" }}</div>
+    </div>
+{% empty %}
+    <p>Nenhum conteudo nesta categoria.</p>
+{% endfor %}
+{% endblock %}

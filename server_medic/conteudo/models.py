@@ -1,10 +1,16 @@
 from django.db import models
 
 
+def conteudo_upload_path(instance, filename):
+    return f"conteudos/{instance.id}/{filename}"
+
+
 class Conteudo(models.Model):
     titulo = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, default="")
     link = models.URLField(max_length=500, blank=True, default="")
+    corpo = models.TextField(blank=True, default="")
+    arquivo = models.FileField(upload_to=conteudo_upload_path, blank=True, null=True)
     autor = models.ForeignKey(
         "autor.Autor", on_delete=models.CASCADE, related_name="conteudos"
     )

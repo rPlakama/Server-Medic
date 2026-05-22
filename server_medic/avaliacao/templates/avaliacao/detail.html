@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Avaliacao — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Avaliacao</h1>
+<div class="card">
+    <p><strong>Conteudo:</strong> {{ avaliacao.conteudo.titulo }}</p>
+    <p><strong>Usuario:</strong> {{ avaliacao.usuario.email }}</p>
+    <p><strong>Nota:</strong> {{ avaliacao.nota }}</p>
+    <p><strong>Data:</strong> {{ avaliacao.data_avaliacao|date:"d/m/Y" }}</p>
+</div>
+{% endblock %}

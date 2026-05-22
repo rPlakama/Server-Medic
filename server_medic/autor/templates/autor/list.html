@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Autores — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Autores</h1>
+{% for a in autores %}
+    <div class="card">
+        <h2><a href="{% url 'autor:detail' a.pk %}">{{ a.nome_plataforma }}</a></h2>
+        <div class="meta">{{ a.atuacao }}{% if a.instituicao %} — {{ a.instituicao }}{% endif %}</div>
+    </div>
+{% empty %}
+    <p>Nenhum autor cadastrado.</p>
+{% endfor %}
+{% endblock %}

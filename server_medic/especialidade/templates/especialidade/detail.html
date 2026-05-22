@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ especialidade.nome }} — MedInfo{% endblock %}
+
+{% block content %}
+<h1>{{ especialidade.nome }}</h1>
+<div class="card">
+    <p>{{ especialidade.descricao }}</p>
+</div>
+
+<h2>Conteudos desta especialidade</h2>
+{% for c in especialidade.conteudos.all %}
+    <div class="card">
+        <h3><a href="{% url 'conteudo:detail' c.pk %}">{{ c.titulo }}</a></h3>
+        <div class="meta">{{ c.autor.nome_plataforma }} — {{ c.data_publicacao|date:"d/m/Y" }}</div>
+    </div>
+{% empty %}
+    <p>Nenhum conteudo nesta especialidade.</p>
+{% endfor %}
+{% endblock %}

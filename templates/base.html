@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MedInfo{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #333; }
+        nav { background: #1a5276; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; margin-left: 1rem; }
+        nav a:hover { text-decoration: underline; }
+        nav .brand { font-size: 1.3rem; font-weight: bold; }
+        nav .links { display: flex; align-items: center; gap: 0.5rem; }
+        .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+        .messages { list-style: none; }
+        .messages li { padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 4px; }
+        .messages .success { background: #d4edda; color: #155724; }
+        .messages .error { background: #f8d7da; color: #721c24; }
+        .btn { display: inline-block; padding: 0.5rem 1rem; background: #1a5276; color: white; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        .btn:hover { background: #2471a3; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #5a6268; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h2 { margin-bottom: 0.5rem; }
+        .card .meta { color: #666; font-size: 0.85rem; margin-bottom: 0.75rem; }
+        form label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+        form input, form select, form textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.25rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
+        form textarea { resize: vertical; }
+        .field-wrapper { margin-bottom: 1rem; }
+        .field-wrapper input.error, .field-wrapper select.error, .field-wrapper textarea.error { border-color: #dc3545; background: #fff5f5; }
+        .field-errors { color: #dc3545; font-size: 0.85rem; margin-top: 0.15rem; }
+        .errorlist { list-style: none; padding: 0; margin: 0 0 1rem 0; }
+        .errorlist li { background: #f8d7da; color: #721c24; padding: 0.75rem 1rem; border-radius: 4px; border: 1px solid #f5c6cb; }
+        .helptext { color: #666; font-size: 0.8rem; display: block; margin-top: 0.15rem; }
+        .comments { margin-top: 2rem; }
+        .comment { background: #f9f9f9; padding: 0.75rem; border-radius: 4px; margin-bottom: 0.5rem; }
+        .comment .author { font-weight: bold; font-size: 0.85rem; }
+        .comment .date { color: #888; font-size: 0.8rem; }
+        .comment p { margin-top: 0.25rem; }
+        .inline-form { margin-top: 1.5rem; }
+        .inline-form h3 { margin-bottom: 0.75rem; }
+        .rating { display: flex; gap: 0.5rem; align-items: center; }
+        .rating select { width: auto; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="links">
+            <a href="/" class="brand">MedInfo</a>
+            <a href="{% url 'conteudo:list' %}">Conteudos</a>
+            <a href="{% url 'especialidade:list' %}">Especialidades</a>
+            <a href="{% url 'categoria:list' %}">Categorias</a>
+            <a href="{% url 'autor:list' %}">Autores</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'usuario:list' %}">Usuarios</a>
+            {% endif %}
+        </div>
+        <div class="links">
+            {% if user.is_authenticated %}
+                <span>Ola, {{ user.email }}</span>
+                <form method="post" action="{% url 'logout' %}" style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary" style="padding:0.3rem 0.7rem;font-size:0.8rem;">Sair</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Entrar</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="container">
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

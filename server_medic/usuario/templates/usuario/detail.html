@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ usuario_obj.email }} — MedInfo{% endblock %}
+
+{% block content %}
+<h1>{{ usuario_obj.email }}</h1>
+<div class="card">
+    <p><strong>Username:</strong> {{ usuario_obj.username }}</p>
+    <p><strong>Perfil:</strong> {{ usuario_obj.get_perfil_display }}</p>
+    {% if usuario_obj.data_nascimento %}
+        <p><strong>Data de Nascimento:</strong> {{ usuario_obj.data_nascimento|date:"d/m/Y" }}</p>
+    {% endif %}
+    {% if usuario_obj.crm %}
+        <p><strong>CRM:</strong> {{ usuario_obj.crm }}</p>
+    {% endif %}
+    {% if usuario_obj.especialidade_atuacao %}
+        <p><strong>Especialidade:</strong> {{ usuario_obj.especialidade_atuacao.nome }}</p>
+    {% endif %}
+    <p><strong>Membro desde:</strong> {{ usuario_obj.date_joined|date:"d/m/Y" }}</p>
+</div>
+{% endblock %}

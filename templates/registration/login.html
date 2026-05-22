@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Entrar</h1>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="field-wrapper">
+        <label for="{{ form.username.id_for_label }}">E-mail ou Nome de usuario</label>
+        <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}"
+               value="{{ form.username.value|default:'' }}" required
+               {% if form.username.errors %}class="error"{% endif %}>
+        {% if form.username.errors %}
+            <div class="field-errors">
+                {% for error in form.username.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.password.id_for_label }}">Senha</label>
+        <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required
+               {% if form.password.errors %}class="error"{% endif %}>
+        {% if form.password.errors %}
+            <div class="field-errors">
+                {% for error in form.password.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn">Entrar</button>
+</form>
+
+<p style="margin-top: 1rem;">
+    Nao tem conta? <a href="{% url 'usuario:create' %}">Criar conta</a>
+</p>
+{% endblock %}

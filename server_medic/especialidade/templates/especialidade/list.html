@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Especialidades — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Especialidades</h1>
+{% for e in especialidades %}
+    <div class="card">
+        <h2><a href="{% url 'especialidade:detail' e.pk %}">{{ e.nome }}</a></h2>
+        <p>{{ e.descricao|truncatewords:20 }}</p>
+    </div>
+{% empty %}
+    <p>Nenhuma especialidade cadastrada.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Usuarios — MedInfo{% endblock %}
+
+{% block content %}
+<h1>Usuarios</h1>
+{% for u in usuarios %}
+    <div class="card">
+        <h2><a href="{% url 'usuario:detail' u.pk %}">{{ u.email }}</a></h2>
+        <div class="meta">
+            Perfil: {{ u.get_perfil_display }}{% if u.especialidade_atuacao %} / {{ u.especialidade_atuacao.nome }}{% endif %}
+        </div>
+    </div>
+{% empty %}
+    <p>Nenhum usuario cadastrado.</p>
+{% endfor %}
+{% endblock %}

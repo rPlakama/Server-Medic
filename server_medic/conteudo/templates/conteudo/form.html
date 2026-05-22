@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action }} Conteudo — MedInfo{% endblock %}
+
+{% block content %}
+<h1>{{ action }} Conteudo</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="field-wrapper">
+        <label for="{{ form.titulo.id_for_label }}">Titulo</label>
+        <input type="text" name="{{ form.titulo.name }}" id="{{ form.titulo.id_for_label }}"
+               value="{{ form.titulo.value|default:'' }}" required maxlength="255"
+               {% if form.titulo.errors %}class="error"{% endif %}>
+        {% if form.titulo.errors %}
+            <div class="field-errors">
+                {% for error in form.titulo.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.descricao.id_for_label }}">Descricao</label>
+        <textarea name="{{ form.descricao.name }}" id="{{ form.descricao.id_for_label }}" rows="4"
+                  {% if form.descricao.errors %}class="error"{% endif %}>{{ form.descricao.value|default:'' }}</textarea>
+        {% if form.descricao.errors %}
+            <div class="field-errors">
+                {% for error in form.descricao.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.corpo.id_for_label }}">Corpo do artigo</label>
+        <textarea name="{{ form.corpo.name }}" id="{{ form.corpo.id_for_label }}" rows="10"
+                  {% if form.corpo.errors %}class="error"{% endif %}>{{ form.corpo.value|default:'' }}</textarea>
+        {% if form.corpo.errors %}
+            <div class="field-errors">
+                {% for error in form.corpo.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.link.id_for_label }}">Link externo</label>
+        <input type="url" name="{{ form.link.name }}" id="{{ form.link.id_for_label }}"
+               value="{{ form.link.value|default:'' }}" maxlength="500"
+               {% if form.link.errors %}class="error"{% endif %}>
+        {% if form.link.errors %}
+            <div class="field-errors">
+                {% for error in form.link.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.arquivo.id_for_label }}">Arquivo (PDF, video)</label>
+        <input type="file" name="{{ form.arquivo.name }}" id="{{ form.arquivo.id_for_label }}"
+               {% if form.arquivo.errors %}class="error"{% endif %}>
+        {% if form.arquivo.errors %}
+            <div class="field-errors">
+                {% for error in form.arquivo.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.especialidade_nome.id_for_label }}">Especialidade</label>
+        <input type="text" name="{{ form.especialidade_nome.name }}" id="{{ form.especialidade_nome.id_for_label }}"
+               list="especialidade-list" autocomplete="off"
+               value="{{ form.especialidade_nome.value|default:'' }}"
+               placeholder="Digite para buscar..."
+               required
+               {% if form.especialidade_nome.errors %}class="error"{% endif %}>
+        <datalist id="especialidade-list">
+            {% for esp in especialidades %}
+                <option value="{{ esp.nome }}">
+            {% endfor %}
+        </datalist>
+        {% if form.especialidade_nome.errors %}
+            <div class="field-errors">
+                {% for error in form.especialidade_nome.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="field-wrapper">
+        <label for="{{ form.categoria.id_for_label }}">Categoria</label>
+        <select name="{{ form.categoria.name }}" id="{{ form.categoria.id_for_label }}" required
+                {% if form.categoria.errors %}class="error"{% endif %}>
+            <option value="">---------</option>
+            {% for value, label in form.categoria.field.choices %}
+                <option value="{{ value }}" {% if form.categoria.value|stringformat:'s' == value|stringformat:'s' %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        {% if form.categoria.errors %}
+            <div class="field-errors">
+                {% for error in form.categoria.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn">Salvar</button>
+</form>
+{% endblock %}

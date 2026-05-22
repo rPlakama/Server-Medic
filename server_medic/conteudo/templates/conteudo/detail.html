@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ conteudo.titulo }} — MedInfo{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ conteudo.titulo }}</h1>
+    <div class="meta">
+        <strong>{{ conteudo.autor.nome_plataforma }}</strong> —
+        {{ conteudo.especialidade.nome }} —
+        {{ conteudo.categoria.get_tipo_display }} ({{ conteudo.categoria.get_nivel_complexidade_display }}) —
+        {{ conteudo.data_publicacao|date:"d/m/Y H:i" }}
+    </div>
+
+    {% if conteudo.descricao %}
+        <p>{{ conteudo.descricao }}</p>
+    {% endif %}
+
+    {% if conteudo.corpo %}
+        <div style="margin-top: 1rem; white-space: pre-wrap;">{{ conteudo.corpo }}</div>
+    {% endif %}
+
+    {% if conteudo.link %}
+        <p style="margin-top: 1rem;">
+            <strong>Link:</strong> <a href="{{ conteudo.link }}" target="_blank" rel="noopener">{{ conteudo.link }}</a>
+        </p>
+    {% endif %}
+
+    {% if conteudo.arquivo %}
+        {% if conteudo.arquivo.name.lower|slice:'-4:' == '.pdf' %}
+            <div class="card" style="padding: 0.5rem;">
+                <iframe src="{% url 'conteudo:arquivo' conteudo.pk %}"
+                        width="100%" height="600px" style="border: none; border-radius: 4px;">
+                </iframe>
+            </div>
+        {% endif %}
+        <p style="margin-top: 0.5rem;">
+            <strong>Arquivo:</strong>
+            <a href="{% url 'conteudo:arquivo' conteudo.pk %}">{{ conteudo.arquivo.name }}</a>
+            {% if conteudo.arquivo.name.lower|slice:'-4:' == '.pdf' %}
+                <span style="margin-left: 0.5rem;">
+                    <a href="{% url 'conteudo:arquivo' conteudo.pk %}" download style="font-size: 0.85rem;">baixar PDF</a>
+                </span>
+            {% endif %}
+        </p>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="card inline-form">
+    <h3>Avaliar</h3>
+    <form method="post" action="{% url 'conteudo:avaliar' conteudo.pk %}" novalidate>
+        {% csrf_token %}
+        <div class="rating">
+            <select name="{{ rating_form.nota.name }}" id="{{ rating_form.nota.id_for_label }}"
+                    {% if rating_form.nota.errors %}class="error"{% endif %}>
+                <option value="">Selecione</option>
+                {% for value, label in rating_form.nota.field.choices %}
+                    <option value="{{ value }}" {% if rating_form.nota.value|stringformat:'s' == value|stringformat:'s' %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">
+                {% if user_rating %}Atualizar{% else %}Enviar{% endif %}
+            </button>
+        </div>
+    </form>
+    {% if rating_form.nota.errors %}
+        <div class="field-errors">
+            {% for error in rating_form.nota.errors %}{{ error }}{% endfor %}
+        </div>
+    {% endif %}
+    {% if user_rating %}
+        <span style="color: #666; font-size: 0.85rem;">Sua nota atual: {{ user_rating.nota }}</span>
+    {% endif %}
+</div>
+
+<div class="card inline-form">
+    <h3>Comentar</h3>
+    <form method="post" action="{% url 'conteudo:comentar' conteudo.pk %}" novalidate>
+        {% csrf_token %}
+        <textarea name="{{ comment_form.texto.name }}" id="{{ comment_form.texto.id_for_label }}"
+                  rows="3" placeholder="Escreva seu comentario..."
+                  {% if comment_form.texto.errors %}class="error"{% endif %}>{{ comment_form.texto.value|default:'' }}</textarea>
+        {% if comment_form.texto.errors %}
+            <div class="field-errors">
+                {% for error in comment_form.texto.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+        <button type="submit" class="btn">Enviar</button>
+    </form>
+</div>
+{% endif %}
+
+<div class="comments">
+    <h2>Comentarios</h2>
+    {% for c in comentarios %}
+        <div class="comment">
+            <span class="author">{{ c.usuario.email }}</span>
+            <span class="date">{{ c.data|date:"d/m/Y H:i" }}</span>
+            <p>{{ c.texto }}</p>
+        </div>
+    {% empty %}
+        <p>Nenhum comentario ainda.</p>
+    {% endfor %}
+</div>
+{% endblock %}
